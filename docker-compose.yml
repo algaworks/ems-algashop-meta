@@ -5,4 +5,4 @@ services:
       - "8780:8080"
     volumes:
       - ./etc/wiremock:/home/wiremock/mappings
-    command: --verbose
+    command: --verbose --disable-http2-plain
