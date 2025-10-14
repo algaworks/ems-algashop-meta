@@ -2,7 +2,7 @@ services:
   wiremock:
     image: wiremock/wiremock:3x
     ports:
-      - "8780:8080"
+      - "8787:8080"
     volumes:
       - ./etc/wiremock:/home/wiremock/mappings
     command: --verbose --disable-http2-plain
