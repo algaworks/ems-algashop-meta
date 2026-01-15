@@ -124,10 +124,10 @@ services:
       
       mongosh --host algashop-mongodb-1 --eval 'printjson(rs.status())'
       "
-    restart: "no"
+    restart: no
   algashop-redis:
     image: redis:8.4
-    restart: unless-stopped
+    restart: no
     ports:
       - 6379:6379
     command: [
