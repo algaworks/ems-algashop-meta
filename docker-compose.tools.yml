@@ -6,6 +6,10 @@ services:
     volumes:
       - ./etc/wiremock:/home/wiremock/mappings
     command: --verbose --disable-http2-plain
+    deploy:
+      resources:
+        limits:
+          memory: 512M
   algashop-postgres:
     image: postgres:17-alpine
     deploy:
