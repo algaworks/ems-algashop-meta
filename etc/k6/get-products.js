@@ -4,11 +4,22 @@ import { sleep, check } from 'k6';
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8083';
 
 export const options = {
-  stages: [
-    { duration: '5s', target: 100 },
-    { duration: '5s', target: 300 },
-    { duration: '3s', target: 0 },
-  ],
+  scenarios: {
+      get_products_smoke_test: {
+        executor: 'constant-vus',
+        vus: 1,
+        duration: '5s'
+      },
+      get_products_load_test: {
+        executor: 'constant-arrival-rate',
+        rate: 100,
+        timeUnit: '1s',
+        duration: '1m',
+        startTime: '5s',
+        maxVUs: 200,
+        preAllocatedVUs: 50
+      }
+  },
   thresholds: {
     http_req_duration: ['p(95) < 800'],
     http_req_failed: ['rate < 0.01']
