@@ -11,13 +11,9 @@ export const options = {
         duration: '5s'
       },
       buy_now_volume_test: {
-        executor: 'constant-arrival-rate',
-        rate: 60,
-        timeUnit: '1s',
-        duration: '1m',
-        startTime: '5s',
-        maxVUs: 200,
-        preAllocatedVUs: 50
+        executor: 'constant-vus',
+        vus: 50,
+        duration: '5s'
       }
   },
   thresholds: {
