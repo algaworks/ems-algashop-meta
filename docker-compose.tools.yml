@@ -160,7 +160,7 @@ services:
       - 4566:4566
       - 4510-4559:4510-4559
     environment:
-      SERVICES: s3,secretsmanager
+      SERVICES: s3,secretsmanager,ssm
       DEBUG: 1
       LS_ACCESS_KEY_ID: LSIAQAAAAAAVNCBMPNSG
       LS_SECRET_ACCESS_KEY: test
