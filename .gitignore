@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+.claude/settings.local.json
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
