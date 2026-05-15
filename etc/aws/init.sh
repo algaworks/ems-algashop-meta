@@ -37,6 +37,7 @@ awslocal ssm put-parameter \
     --value "http://auth.algashop.local:8081" \
     --type String
 
+# Senha = testing123
 awslocal ssm put-parameter \
     --name /config/algashop/authorization-server/clients/algashop-test/secret \
     --value '{bcrypt}$2a$10$Fmw0PqHGZAYOqstR7ct7xuTkbljbE3uvDLE8JmuXxu.GttYxlKytW' \
