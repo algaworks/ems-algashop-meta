@@ -4,6 +4,22 @@ AWS_ACCESS_KEY_ID=LS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY=LS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION=LS_REGION
 
+
+openssl genpkey -algorithm RSA -out /tmp/algashop-private-key.pem -pkeyopt rsa_keygen_bits:2048
+
+PRIVATE_KEY_B64=$(base64 -w 0 /tmp/algashop-private-key.pem)
+
+PRIVATE_KEY_ID=$(openssl rand -hex 16)
+
+printf '{"privateKeyId":"%s","privateKey":"%s"}' \
+  "$PRIVATE_KEY_ID" "$PRIVATE_KEY_B64" > /tmp/secret.json
+
+awslocal secretsmanager create-secret \
+  --name /config/algashop/authorization-server/rsa-key \
+  --secret-string file:///tmp/secret.json
+
+
+
 awslocal secretsmanager create-secret \
   --name /secret/algashop/authorization-server/database \
   --secret-string "{\"username\":\"postgres\",\"password\":\"postgres\"}"
