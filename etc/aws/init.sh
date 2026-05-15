@@ -26,7 +26,10 @@ awslocal ssm put-parameter \
     --value '{bcrypt}$2a$10$Fmw0PqHGZAYOqstR7ct7xuTkbljbE3uvDLE8JmuXxu.GttYxlKytW' \
     --type SecureString
 
-
+awslocal ssm put-parameter \
+    --name /config/algashop/shared/auth-server-url \
+    --value "http://auth.algashop.local:8081" \
+    --type String
 
 awslocal s3 mb s3://algashop-product-image
 
