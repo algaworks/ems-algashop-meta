@@ -26,3 +26,5 @@ name,type,value
 /config/algashop/billing/jpa/show-sql,String,true
 /config/algashop/billing/fastpay/hostname,String,http://fastpay:9995
 /config/algashop/billing/fastpay/webhook-url,String,http://host.docker.internal:8082/api/v1/webhooks/fastpay
+/config/algashop/billing-scheduler/datasource/url,String,jdbc:postgresql://algashop-postgres:5432/billing
+/config/algashop/billing-scheduler/fastpay/hostname,String,http://fastpay:9995
