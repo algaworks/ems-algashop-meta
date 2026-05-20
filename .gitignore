@@ -1,5 +1,7 @@
 HELP.md
 .gradle
+.claude
+.claude/hooks
 .claude/settings.local.json
 build/
 !gradle/wrapper/gradle-wrapper.jar

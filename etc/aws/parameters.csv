@@ -22,3 +22,7 @@ name,type,value
 /config/algashop/authorization-server/clients/algashop-admin-web/redirect-uris,StringList,http://admin.algashop.local:4200,http://admin.algashop.local:4200/silent-refresh.html,https://oauth.pstmn.io/v1/callback
 /config/algashop/authorization-server/clients/algashop-admin-web/post-logout-redirect-uris,StringList,http://admin.algashop.local:4200
 /config/algashop/shared/auth-server-url,String,http://auth.algashop.local:8081
+/config/algashop/billing/datasource/url,String,jdbc:postgresql://algashop-postgres:5432/billing
+/config/algashop/billing/jpa/show-sql,String,true
+/config/algashop/billing/fastpay/hostname,String,http://fastpay:9995
+/config/algashop/billing/fastpay/webhook-url,String,http://host.docker.internal:8082/api/v1/webhooks/fastpay
