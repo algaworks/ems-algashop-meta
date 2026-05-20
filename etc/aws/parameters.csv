@@ -28,3 +28,12 @@ name,type,value
 /config/algashop/billing/fastpay/webhook-url,String,http://host.docker.internal:8082/api/v1/webhooks/fastpay
 /config/algashop/billing-scheduler/datasource/url,String,jdbc:postgresql://algashop-postgres:5432/billing
 /config/algashop/billing-scheduler/fastpay/hostname,String,http://fastpay:9995
+/config/algashop/ordering/datasource/url,String,jdbc:postgresql://algashop-postgres:5432/ordering
+/config/algashop/ordering/jpa/show-sql,String,true
+/config/algashop/ordering/redis/host,String,algashop-redis
+/config/algashop/ordering/redis/port,String,6379
+/config/algashop/ordering/redis/database,String,1
+/config/algashop/ordering/redis/timeout,String,600
+/config/algashop/ordering/integrations/shipping-provider,String,RAPIDEX
+/config/algashop/ordering/integrations/rapidex-url,String,http://wiremock:8080
+/config/algashop/ordering/integrations/product-catalog-url,String,http://algashop-product-catalog:8083
