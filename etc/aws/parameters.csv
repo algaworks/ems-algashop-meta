@@ -37,3 +37,10 @@ name,type,value
 /config/algashop/ordering/integrations/shipping-provider,String,RAPIDEX
 /config/algashop/ordering/integrations/rapidex-url,String,http://wiremock:8080
 /config/algashop/ordering/integrations/product-catalog-url,String,http://algashop-product-catalog:8083
+/config/algashop/product-catalog/mongodb/uri,String,mongodb://algashop-mongodb-1:27017,algashop-mongodb-2:27017,algashop-mongodb-3:27017/product_catalog?replicaSet=rs0
+/config/algashop/product-catalog/redis/host,String,algashop-redis
+/config/algashop/product-catalog/redis/port,String,6379
+/config/algashop/product-catalog/redis/database,String,0
+/config/algashop/product-catalog/redis/timeout,String,20
+/config/algashop/product-catalog/storage/bucket-name,String,algashop-product-image
+/config/algashop/product-catalog/storage/image-storage-url,String,http://algashop-localstack:4566/algashop-product-image
