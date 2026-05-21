@@ -162,7 +162,7 @@ services:
     environment:
       SERVICES: s3,secretsmanager,ssm
       DEBUG: 1
-      LS_ACCESS_KEY_ID: LSIAQAAAAAAVNCBMPNSG
+      LS_ACCESS_KEY_ID: test
       LS_SECRET_ACCESS_KEY: test
       LS_REGION: us-east-1
     volumes:
