@@ -34,3 +34,6 @@
 	path = microservices/gateway-ecommerce
 	url = git@github.com:algaworks/ems-algashop-gateway-ecommerce.git
 	branch = main
+[submodule "microservices/gateway-admin"]
+	path = microservices/gateway-admin
+	url = git@github.com:algaworks/ems-algashop-gateway-admin.git
