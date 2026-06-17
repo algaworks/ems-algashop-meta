@@ -8,12 +8,18 @@ This is a **monorepo with microservices as Git submodules**. Each microservice l
 
 ```
 algashop/
+├── apps/
+│   ├── admin/                  Angular 17 admin SPA (port 4200 / 80 in Docker)
+│   └── ecommerce/              Spring Boot BFF with Thymeleaf (port 9080)
 ├── microservices/
 │   ├── authorization-server/   OAuth2 Authorization Server (port 8081, PostgreSQL)
-│   ├── ordering/               Order Management (port 8080, PostgreSQL)
 │   ├── billing/                Billing Service (port 8082, PostgreSQL)
 │   ├── billing-scheduler/      Scheduled billing tasks (PostgreSQL)
-│   └── product-catalog/        Product Catalog (port 8083, MongoDB)
+│   ├── gateway-admin/          API Gateway – admin portal (port 9998, Redis)
+│   ├── gateway-ecommerce/      API Gateway – ecommerce (port 9999, Redis)
+│   ├── ordering/               Order Management (port 8080, PostgreSQL)
+│   ├── product-catalog/        Product Catalog (port 8083, MongoDB)
+│   └── service-registry/       Eureka Service Registry (port 8761)
 ├── etc/
 │   ├── postgres/               PostgreSQL init scripts (creates DBs)
 │   ├── aws/                    LocalStack S3 init
@@ -29,7 +35,11 @@ algashop/
 - **Java 25**, Gradle 9.2.1, Spring Boot 4.0.x, Spring Cloud 2025.x
 - **PostgreSQL** services: ordering, billing, billing-scheduler, authorization-server
 - **MongoDB** (replica set): product-catalog
-- **Redis**: caching and session store (ordering, product-catalog)
+- **Redis**: caching, session store, and rate limiting (ordering, product-catalog, gateway-admin, gateway-ecommerce, apps/ecommerce)
+- **Spring Cloud Gateway** (WebFlux reactive): gateway-admin, gateway-ecommerce
+- **Netflix Eureka**: service-registry is the server; all backend services and gateways are Eureka clients
+- **Thymeleaf**: server-side rendering in apps/ecommerce
+- **Angular 17**, Node 20, PrimeNG 17: apps/admin SPA
 - **Spring Security OAuth2**: authorization-server is the auth provider; all others are resource servers
 - **Flyway**: database migrations (runs on startup)
 - **Lombok**, ModelMapper, TSID for IDs
@@ -47,6 +57,28 @@ cd microservices/<service-name>
 ./gradlew build          # compile + test
 ./gradlew bootJar        # build runnable JAR only
 ./gradlew dockerBuild    # build multi-platform Docker image (linux/arm64,linux/amd64)
+```
+
+For `apps/ecommerce` (Spring Boot BFF), the same Gradle commands apply:
+
+```bash
+cd apps/ecommerce
+
+./gradlew build
+./gradlew bootJar
+./gradlew dockerBuild
+```
+
+For `apps/admin` (Angular SPA):
+
+```bash
+cd apps/admin
+
+npm install          # install dependencies
+npm start            # dev server at https://admin.algashop.local:4200
+npm run build        # production build → dist/admin/
+npm run lint         # ESLint
+npm run test         # Playwright E2E tests
 ```
 
 ## Test Commands
@@ -83,9 +115,35 @@ docker compose up -d
 127.0.0.1 algashop-mongodb-1 algashop-mongodb-2 algashop-mongodb-3
 127.0.0.1 algashop-localstack s3.algashop-localstack algashop-product-image.algashop-localstack
 127.0.0.1 authorization-server
+127.0.0.1 auth.algashop.local
+127.0.0.1 admin.algashop.local
+127.0.0.1 admin-api.algashop.local
+127.0.0.1 api.algashop.local
 ```
 
 ## Architecture
+
+### Service Discovery (Eureka)
+- `service-registry` is the Eureka Server (port 8761)
+- All backend microservices and both gateways register as Eureka clients
+- Gateways use Eureka for load-balanced route resolution to backend services
+
+### API Gateway Layer
+- `gateway-admin` (port 9998): routes requests from the admin SPA; CORS restricted to `http://admin.algashop.local:4200`; Redis-backed rate limiting; circuit breaker on ordering routes (failure threshold 50%, sliding window 8)
+- `gateway-ecommerce` (port 9999): routes requests from the ecommerce BFF; Redis-backed rate limiting (50 req/s, burst 200); local response cache for product-catalog endpoints (1 min TTL, 30 MB)
+- Both gateways are OAuth2 Resource Servers (validate tokens from authorization-server)
+
+### Ecommerce BFF (`apps/ecommerce`)
+- Spring Boot 4.0.x with Thymeleaf for server-side rendering; port 9080
+- Dual OAuth2 roles: Resource Server + OAuth2 Client (authorization code flow for users; client credentials M2M with `algashop-ecommerce-m2m`)
+- Redis DB 4 for session management
+- Calls backend APIs through `gateway-ecommerce` at `http://api.algashop.local:9999`
+
+### Admin SPA (`apps/admin`)
+- Angular 17, PrimeNG 17; dev port 4200, Docker port 80 (Nginx)
+- OAuth2 OIDC client (`angular-oauth2-oidc`) against authorization-server at `http://auth.algashop.local:8081`
+- Calls backend APIs through `gateway-admin` at `http://admin-api.algashop.local:9998`
+- Playwright for E2E tests
 
 ### Hexagonal Architecture
 Services (especially `ordering`) follow hexagonal architecture with explicit adapter layers:
@@ -117,13 +175,14 @@ Each service uses profile layering:
 | algashop-postgres | 5432 | Shared PostgreSQL for all relational services |
 | algashop-mongodb-{1,2,3} | 27017–27019 | MongoDB replica set for product-catalog |
 | algashop-redis | 6379 | Cache + session (password: `algashop`) |
+| service-registry | 8761 | Eureka service discovery |
 | wiremock | 8787 | External API mocking |
 | algashop-localstack | 4566 | AWS S3 emulation for product images |
 | fastpay | 9995 | Payment provider mock |
 
 ## Working with Submodules
 
-Each microservice is an independent Git repo. When modifying service code, commits go into the submodule repo. After committing there, update the submodule reference from the monorepo root.
+Each microservice and both `apps/` entries are independent Git repos referenced as submodules. When modifying service code, commits go into the submodule repo. After committing there, update the submodule reference from the monorepo root.
 
 ```bash
 # Initialize submodules after cloning
