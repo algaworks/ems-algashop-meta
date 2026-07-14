@@ -191,6 +191,3 @@ volumes:
   algashop-mongodb-1:
   algashop-mongodb-2:
   algashop-mongodb-3:
-  algashop-kafka-data-1:
-  algashop-kafka-data-2:
-  algashop-kafka-data-3:
