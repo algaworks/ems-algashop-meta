@@ -1,6 +1,8 @@
 HELP.md
 .gradle
 .claude
+.codegraph
+.codex
 .claude/hooks
 .claude/settings.local.json
 build/
