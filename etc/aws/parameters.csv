@@ -48,11 +48,11 @@ name,type,value
 /config/algashop/gateway-admin/redis/host,String,algashop-redis
 /config/algashop/gateway-admin/redis/port,String,6379
 /config/algashop/gateway-admin/redis/database,String,3
-/config/algashop/gateway-admin/httpclient/connect-timeout,String,9000
-/config/algashop/gateway-admin/httpclient/response-timeout,String,9000
+/config/algashop/gateway-admin/httpclient/connect-timeout,String,30000
+/config/algashop/gateway-admin/httpclient/response-timeout,String,30000
 /config/algashop/gateway-admin/cors/allowed-origin,String,http://admin.algashop.local:4200
 /config/algashop/gateway-ecommerce/redis/host,String,algashop-redis
 /config/algashop/gateway-ecommerce/redis/port,String,6379
 /config/algashop/gateway-ecommerce/redis/database,String,4
-/config/algashop/gateway-ecommerce/httpclient/connect-timeout,String,9000
-/config/algashop/gateway-ecommerce/httpclient/response-timeout,String,9000
+/config/algashop/gateway-ecommerce/httpclient/connect-timeout,String,30000
+/config/algashop/gateway-ecommerce/httpclient/response-timeout,String,30000
