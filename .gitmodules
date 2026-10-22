@@ -50,3 +50,7 @@
 	path = microservices/notifications
 	url = git@github.com:algaworks/ems-algashop-notifications.git
 	branch = main
+[submodule "microservices/insights"]
+	path = microservices/insights
+	url = git@github.com:algaworks/ems-algashop-insights.git
+	branch = main
