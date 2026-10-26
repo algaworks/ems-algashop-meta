@@ -285,6 +285,16 @@ services:
       resources:
         limits:
           memory: 1G
+  algashop-kafka-connect-init:
+    image: curlimages/curl:8.23.0
+    restart: no
+    depends_on:
+      - algashop-kafka-connect
+    environment:
+      CONNECT_URL: http://algashop-kafka-connect:8083
+    volumes:
+      - ./etc/kafka-connect:/connectors:ro
+    entrypoint: ["sh", "/connectors/apply-connectors.sh"]
   algashop-insights-postgres:
     image: postgres:17-alpine
     deploy:
