@@ -9,5 +9,7 @@
   "collection.name.format": "order",
   "insert.mode": "upsert",
   "primary.key.mode": "record_key",
-  "schema.evolution": "none"
+  "schema.evolution": "none",
+  "delete.enabled": "true",
+  "field.exclude.list": "shipping_address_city,shipping_address_state"
 }
