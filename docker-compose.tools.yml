@@ -271,6 +271,8 @@ services:
       - algashop-kafka-1
       - algashop-kafka-2
       - algashop-kafka-3
+    volumes:
+      - ./etc/kafka-connect/plugins/uuid-smt:/kafka/connect/uuid-smt:ro
     environment:
       BOOTSTRAP_SERVERS: algashop-kafka-1:9081,algashop-kafka-2:9082,algashop-kafka-3:9083
       GROUP_ID: algashop-kafka-connect
