@@ -6,6 +6,7 @@
   "connection.username": "postgres",
   "connection.password": "postgres",
   "topics": "cdc.ordering.v2.public.order",
+  "field.exclude.list": "shipping_address_city,shipping_address_state",
   "collection.name.format": "order",
   "insert.mode": "upsert",
   "primary.key.mode": "record_key",
