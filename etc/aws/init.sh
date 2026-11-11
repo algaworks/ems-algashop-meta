@@ -4,6 +4,13 @@ AWS_ACCESS_KEY_ID=LS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY=LS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION=LS_REGION
 
+# Arquivo que sinaliza ao health check do container que segredos e parâmetros já foram cadastrados.
+# Fica num tmpfs (docker-compose.tools.yml), então já nasce vazio a cada start do container.
+READY_FILE=/run/algashop/ready
+rm -f "$READY_FILE"
+
+FAILURES=0
+
 
 openssl genpkey -algorithm RSA -out /tmp/algashop-private-key.pem -pkeyopt rsa_keygen_bits:2048
 
@@ -16,7 +23,7 @@ printf '{"privateKeyId":"%s","privateKey":"%s"}' \
 
 awslocal secretsmanager create-secret \
   --name /config/algashop/authorization-server/rsa-key \
-  --secret-string file:///tmp/secret.json
+  --secret-string file:///tmp/secret.json || FAILURES=$((FAILURES + 1))
 
 awslocal configure set cli_follow_urlparam false
 
@@ -30,7 +37,7 @@ awslocal configure set cli_follow_urlparam false
     [ -z "$name" ] && continue          # pula linha em branco
     case "$name" in \#*) continue ;; esac   # pula comentário
     value=${value%$'\r'}                # remove \r se foi salvo no Windows
-    awslocal ssm put-parameter --name "$name" --type "$type" --value "$value" --overwrite
+    awslocal ssm put-parameter --name "$name" --type "$type" --value "$value" --overwrite || FAILURES=$((FAILURES + 1))
   done
 } < /etc/aws/parameters.csv
 
@@ -43,9 +50,19 @@ awslocal configure set cli_follow_urlparam false
     [ -z "$name" ] && continue
     case "$name" in \#*) continue ;; esac
     value=${value%$'\r'}
-    awslocal secretsmanager create-secret --name "$name" --secret-string "$value"
+    awslocal secretsmanager create-secret --name "$name" --secret-string "$value" || FAILURES=$((FAILURES + 1))
   done
 } < /etc/aws/secrets.csv
+
+
+# Segredos e parâmetros cadastrados: já dá para os microsserviços iniciarem (os arquivos do S3 não travam o startup).
+# O health check do container só passa quando este arquivo existir.
+if [ "$FAILURES" -eq 0 ]; then
+  touch "$READY_FILE"
+  echo "LocalStack READY: segredos e parâmetros cadastrados"
+else
+  echo "LocalStack NOT READY: $FAILURES falha(s) ao cadastrar segredos/parâmetros" >&2
+fi
 
 
 
