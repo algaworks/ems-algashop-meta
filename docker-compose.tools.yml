@@ -284,10 +284,13 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 3
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 3
       KAFKA_HEAP_OPTS: -Xms256m -Xmx768m
-      CONNECT_CONFIG_PROVIDERS: secretsmanager
+      CONNECT_CONFIG_PROVIDERS: secretsmanager,ssm
       CONNECT_CONFIG_PROVIDERS_SECRETSMANAGER_CLASS: com.amazonaws.kafka.config.providers.SecretsManagerConfigProvider
       CONNECT_CONFIG_PROVIDERS_SECRETSMANAGER_PARAM_REGION: us-east-1
       CONNECT_CONFIG_PROVIDERS_SECRETSMANAGER_PARAM_ENDPOINT: http://algashop-localstack:4566
+      CONNECT_CONFIG_PROVIDERS_SSM_CLASS: com.amazonaws.kafka.config.providers.SsmParamStoreConfigProvider
+      CONNECT_CONFIG_PROVIDERS_SSM_PARAM_REGION: us-east-1
+      CONNECT_CONFIG_PROVIDERS_SSM_PARAM_ENDPOINT: http://algashop-localstack:4566
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
     deploy:
