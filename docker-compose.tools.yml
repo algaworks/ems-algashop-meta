@@ -273,6 +273,7 @@ services:
       - algashop-kafka-3
     volumes:
       - ./etc/kafka-connect/plugins/uuid-smt:/kafka/connect/uuid-smt:ro
+      - ./etc/kafka-connect/plugins/aws-config-providers:/kafka/connect/aws-config-providers:ro
     environment:
       BOOTSTRAP_SERVERS: algashop-kafka-1:9081,algashop-kafka-2:9082,algashop-kafka-3:9083
       GROUP_ID: algashop-kafka-connect
@@ -283,6 +284,12 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 3
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 3
       KAFKA_HEAP_OPTS: -Xms256m -Xmx768m
+      CONNECT_CONFIG_PROVIDERS: secretsmanager
+      CONNECT_CONFIG_PROVIDERS_SECRETSMANAGER_CLASS: com.amazonaws.kafka.config.providers.SecretsManagerConfigProvider
+      CONNECT_CONFIG_PROVIDERS_SECRETSMANAGER_PARAM_REGION: us-east-1
+      CONNECT_CONFIG_PROVIDERS_SECRETSMANAGER_PARAM_ENDPOINT: http://algashop-localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
     deploy:
       resources:
         limits:
