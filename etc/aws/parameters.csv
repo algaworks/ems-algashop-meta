@@ -60,3 +60,9 @@ name,type,value
 /config/algashop/kafka-connect/ordering-database/hostname,String,algashop-postgres
 /config/algashop/kafka-connect/ordering-database/port,String,5432
 /config/algashop/kafka-connect/insights-database/connection-url,String,jdbc:postgresql://algashop-insights-postgres:5432/insights
+/config/algashop/insights/datasource/url,String,jdbc:postgresql://localhost:5433/insights
+/config/algashop/notifications/datasource/url,String,jdbc:postgresql://algashop-postgres:5432/notifications
+/config/algashop/notifications/jpa/show-sql,String,true
+/config/algashop/notifications/mail/host,String,algashop-mailpit
+/config/algashop/notifications/mail/port,String,1025
+/config/algashop/notifications/mail/from,String,no-reply@algashop.local
